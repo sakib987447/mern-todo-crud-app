@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -12,6 +13,7 @@ const App = () => {
   const [editTodoId, setEditTodoId] = useState(null);
   const [editText, setEditText] = useState("");
 
+  // Fetch all todos
   const fetchTodos = async () => {
     try {
       setLoading(true);
@@ -21,13 +23,18 @@ const App = () => {
       setTodos(res.data);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to load todos!");
     } finally {
       setLoading(false);
     }
   };
 
+  // Add Todo
   const addTodo = async () => {
-    if (!text.trim()) return;
+    if (!text.trim()) {
+      toast.error("Please enter a task before adding!");
+      return;
+    }
 
     try {
       await axios.post(`${API_URL}/todos`, {
@@ -35,28 +42,40 @@ const App = () => {
       });
 
       setText("");
+
+      toast.success("Todo added successfully!");
+
       fetchTodos();
     } catch (err) {
       console.error(err);
+      toast.error("Failed to add todo!");
     }
   };
 
+  // Delete Todo
   const deleteTodo = async (id) => {
     try {
       await axios.delete(`${API_URL}/todos/${id}`);
 
+      toast.success("Todo deleted successfully!");
+
       fetchTodos();
     } catch (err) {
       console.error(err);
+      toast.error("Failed to delete todo!");
     }
   };
 
+  // Update Todo
   const updateTodo = async (id, newText) => {
     if (newText === null) return;
 
     const trimmed = newText.trim();
 
-    if (!trimmed) return;
+    if (!trimmed) {
+      toast.error("Task cannot be empty!");
+      return;
+    }
 
     try {
       await axios.put(`${API_URL}/todos/${id}`, {
@@ -66,9 +85,12 @@ const App = () => {
       setEditTodoId(null);
       setEditText("");
 
+      toast.success("Todo updated successfully!");
+
       fetchTodos();
     } catch (err) {
       console.error(err);
+      toast.error("Failed to update todo!");
     }
   };
 
@@ -90,6 +112,14 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4 py-10 sm:py-16">
+
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2500,
+        }}
+      />
 
       {/* Main Container */}
       <div className="mx-auto w-full max-w-3xl">
