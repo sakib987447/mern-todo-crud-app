@@ -1,0 +1,18 @@
+# Backend dependencies
+backend/node_modules/
+
+# Frontend dependencies
+frontend/todos/node_modules/
+
+# Environment variables - MongoDB URL and secrets
+.env
+backend/.env
+
+# Build files
+dist/
+build/
+frontend/todos/dist/
+
+# Other files
+.DS_Store
+Thumbs.db
