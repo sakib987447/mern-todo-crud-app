@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
@@ -13,7 +15,9 @@ const App = () => {
   const fetchTodos = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/todos");
+
+      const res = await axios.get(`${API_URL}/todos`);
+
       setTodos(res.data);
     } catch (err) {
       console.error(err);
@@ -26,7 +30,7 @@ const App = () => {
     if (!text.trim()) return;
 
     try {
-      await axios.post("http://localhost:5000/api/todos", {
+      await axios.post(`${API_URL}/todos`, {
         text: text.trim(),
       });
 
@@ -39,7 +43,8 @@ const App = () => {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/todos/${id}`);
+      await axios.delete(`${API_URL}/todos/${id}`);
+
       fetchTodos();
     } catch (err) {
       console.error(err);
@@ -50,13 +55,13 @@ const App = () => {
     if (newText === null) return;
 
     const trimmed = newText.trim();
+
     if (!trimmed) return;
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/todos/${id}`,
-        { text: trimmed }
-      );
+      await axios.put(`${API_URL}/todos/${id}`, {
+        text: trimmed,
+      });
 
       setEditTodoId(null);
       setEditText("");
@@ -208,6 +213,7 @@ const App = () => {
               </p>
 
             </div>
+
           ) : (
 
             /* Todo List */
