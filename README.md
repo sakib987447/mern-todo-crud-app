@@ -8,7 +8,7 @@ The application allows users to create, view, update, and delete todos through a
 
 ## 🔗 Live Demo
 
-👉 [View Live Project](YOUR_LIVE_PROJECT_URL)
+👉 [View Live Project](https://mern-todo-crud-app-blue.vercel.app/)
 
 ---
 
